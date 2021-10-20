@@ -13,9 +13,16 @@ const port = process.env.PORT || 8080;
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
         const id = (0, uuid_1.v4)();
+        const dataPath = path_1.default.resolve(__dirname, '..', 'files', id);
         console.log(__dirname);
-        fs_1.default.mkdirSync(path_1.default.resolve(__dirname, '..', 'files', id));
-        cb(null, path_1.default.resolve('files', id));
+        req.uploadedId = id;
+        fs_1.default.mkdirSync(path_1.default.resolve(dataPath));
+        const fileData = {
+            filename: file.originalname,
+            mimetype: file.mimetype,
+        };
+        fs_1.default.writeFileSync(path_1.default.resolve(dataPath, 'index.json'), JSON.stringify(fileData, null, 4), 'utf-8');
+        cb(null, dataPath);
     },
     filename: function (req, file, cb) {
         console.log('filename');
@@ -30,7 +37,7 @@ app.get('/ping', (req, res) => {
     res.send('pong');
 });
 app.post('/upload', upload.single('filepond'), (req, res) => {
-    res.send('upload');
+    res.send({ status: 'ok', id: req.uploadedId });
 });
 // start the Express server
 app.listen(port, () => {

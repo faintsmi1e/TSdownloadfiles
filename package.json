@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./dist",
-    "dev": "nodemon ./dist",
+    "dev": "nodemon --ignore ./files/ ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
