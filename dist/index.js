@@ -39,6 +39,14 @@ app.get('/ping', (req, res) => {
 app.post('/upload', upload.single('filepond'), (req, res) => {
     res.send({ status: 'ok', id: req.uploadedId });
 });
+app.get('/d/:id', (req, res) => {
+    const id = req.params.id;
+    const dataPath = path_1.default.resolve(__dirname, '..', 'files', id);
+    const indexJsonPath = path_1.default.resolve(dataPath, 'index.json');
+    const fileData = fs_1.default.readFileSync(indexJsonPath);
+    const filename = JSON.parse(fileData).filename;
+    res.download(path_1.default.resolve(dataPath, filename));
+});
 // start the Express server
 app.listen(port, () => {
     console.log(`server started at http://localhost:${port}`);

@@ -47,7 +47,17 @@ app.post('/upload', upload.single('filepond'), (req, res) => {
   
   res.send({status:'ok' , id:(<any>req).uploadedId });
 });
+app.get('/d/:id', (req, res) => {
+  const id = req.params.id;
+  const dataPath = path.resolve(__dirname,'..', 'files', id)
+  const indexJsonPath = path.resolve(dataPath, 'index.json');
 
+  const fileData = fs.readFileSync(indexJsonPath) as unknown;
+
+  const filename = JSON.parse(<string>fileData).filename;
+
+  res.download(path.resolve(dataPath, filename));
+})
 // start the Express server
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
