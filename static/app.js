@@ -1,6 +1,7 @@
 const pond = FilePond.create({
   multiple: true,
-  name: 'filepond'
+  name: 'filepond',
+  server: '/upload'
 });
 
 // Add it to the DOM
